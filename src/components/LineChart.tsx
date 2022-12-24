@@ -10,6 +10,8 @@ import {
     CategoryScale, //x-axis
     LinearScale,  // y-axis
     PointElement,
+    Legend,
+  Tooltip,  
     ChartOptions,
  } from 'chart.js';
 
@@ -17,7 +19,9 @@ import {
     LineElement,
     CategoryScale, 
     LinearScale,  
-    PointElement
+    PointElement,
+    Legend,
+    Tooltip,
  );
 
 
@@ -50,20 +54,19 @@ const data = {
         return days === 1 ? time : date.toLocaleDateString()
         }),
     datasets:[{
-            labels: `price past ${days} in ${currency}`,
+            label: `price past ${days}day in ${currency}`,
             data: historic?.map((coin:any) =>coin[1] ),
             borderColor: 'gold',
-            backgroundColor: 'none',
-            fil:true,
+            backgroundColor: 'white',
             tension:0.4
         }]
 };
 
 const options: ChartOptions<any> = {
-    Element: {
-        points: {
-            radius: 1
-        }
+    elements:{
+        point:{
+            radius: 1,
+        },
     },
 }
 

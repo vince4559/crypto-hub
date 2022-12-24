@@ -8,7 +8,7 @@ const Header = () => {
   return (
    <HStack w={'100vw'} justify={'space-between'}
     bg={'blackAlpha.800'} p={2} px={'2rem'} position= 'sticky' top={0} zIndex={1} >
-   <Flex fontSize={'3xl'}>
+   <Flex fontSize={'2xl'}>
    <NavLink  to={'/'} style={({isActive}) => isActive? {color:'Gold'}:{color:'white'}} >
       Cryto-Hub
     </NavLink>

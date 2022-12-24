@@ -58,7 +58,7 @@ return () => {
        </Stack>
 
       </GridItem >
-      <GridItem colSpan={[3,3,2,2]}>
+      <GridItem colSpan={[3,3,2,2]} >
         <LineChart id={coin?.id} />
       </GridItem>
    </Grid>
