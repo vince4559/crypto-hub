@@ -10,12 +10,16 @@ import { CryptoData } from '../context/CryptoContext'
 interface CurrProp{
   currency: |string,
   symbol:string
+};
+
+type ParamsProps = {
+  id: string
 }
 
 const Coins = () => {
  const {currency, symbol}:any =  CryptoData();
  const [coin, coinSet] = useState<CoinProps>();
-const {id} = useParams();
+const {id}= useParams() as ParamsProps
  const fetchSingleCoin = async() => {
   const { data } = await axios.get(SingleCoin(id))
   coinSet(data)
