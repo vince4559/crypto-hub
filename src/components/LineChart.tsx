@@ -1,9 +1,10 @@
-import { Box, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, color, HStack, Spinner, Text, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import {useState, useEffect} from 'react'
 import { HistoricalChart } from '../config/api';
 import { CryptoData } from '../context/CryptoContext';
 import { Line } from 'react-chartjs-2';
+import { chartDays, ChartDaysProps } from '../config/ChartDays';
 import { 
     Chart as ChartJS,
     LineElement,
@@ -14,6 +15,7 @@ import {
   Tooltip,  
     ChartOptions,
  } from 'chart.js';
+
 
  ChartJS.register(
     LineElement,
@@ -76,15 +78,27 @@ const options: ChartOptions<any> = {
             !historic? 
             (<VStack>
                 <Spinner size={'lg'} />
-                <Text>Toggle price if the chart does'nt come up</Text>
+                <Text color={'red.300'}>Toggle price if the chart does'nt come up</Text>
                 </VStack>) 
             : 
             (
-            <Box  mt={['2rem','2rem','6rem','6rem']}>
+            <Box  mt={['2rem','2rem','4rem','4rem']}>
               <Line
               data ={data}
                 options={options}
               />
+              <HStack justify={'center'}>
+                {chartDays.map((day:ChartDaysProps) => {
+                    const selected = day.value === days;
+                    return (
+              <Button colorScheme={selected? 'yellow' : 'white'} border={'1px solid orange'} size={'sm'} 
+              onClick={() => daysSet(day.value)}
+              >
+                {day.label}
+            </Button>
+            )
+          })}
+        </HStack>
              </Box>
             )
         }        
