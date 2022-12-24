@@ -1,4 +1,4 @@
-import { Box, Spinner, VStack } from '@chakra-ui/react';
+import { Box, Spinner, Text, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import {useState, useEffect} from 'react'
 import { HistoricalChart } from '../config/api';
@@ -24,7 +24,7 @@ import {
 const LineChart = ({id}:any) => {
    const {currency, symbol} = CryptoData();
    const [days, daysSet] = useState<number>(1);
-    const[historic, historicSet] = useState<any>(null);    
+    const[historic, historicSet] = useState<any>();    
 
     
     const fetchHistoric = async() => {
@@ -32,7 +32,7 @@ const LineChart = ({id}:any) => {
        historicSet(data?.prices)
     };
 
-console.log(historic);
+// console.log(historic);
 
 useEffect(() => {
 let history = fetchHistoric()
@@ -53,6 +53,7 @@ const data = {
             labels: `price past ${days} in ${currency}`,
             data: historic?.map((coin:any) =>coin[1] ),
             borderColor: 'gold',
+            backgroundColor: 'none',
             fil:true,
             tension:0.4
         }]
@@ -61,7 +62,7 @@ const data = {
 const options: ChartOptions<any> = {
     Element: {
         points: {
-            radius: 0
+            radius: 1
         }
     },
 }
@@ -70,7 +71,10 @@ const options: ChartOptions<any> = {
     <Box w={'100%'}>
         {
             !historic? 
-            (<VStack><Spinner size={'lg'} /></VStack>) 
+            (<VStack>
+                <Spinner size={'lg'} />
+                <Text>Toggle price if the chart does'nt come up</Text>
+                </VStack>) 
             : 
             (
             <Box  mt={['2rem','2rem','6rem','6rem']}>

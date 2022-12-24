@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import LineChart from '../components/LineChart';
 import { SingleCoin } from '../config/api';
 import { CryptoData } from '../context/CryptoContext'
-import NumberFormat from '../utility/NumberFormat';
+
 
 interface CurrProp{
   currency: |string,
@@ -13,9 +13,9 @@ interface CurrProp{
 }
 
 const Coins = () => {
- const {currency, symbol}:CurrProp =  CryptoData();
+ const {currency, symbol}:any =  CryptoData();
  const [coin, coinSet] = useState<CoinProps>();
-const {id} = useParams()
+const {id} = useParams();
  const fetchSingleCoin = async() => {
   const { data } = await axios.get(SingleCoin(id))
   coinSet(data)
@@ -40,7 +40,7 @@ return () => {
           <Text  fontSize='1.8rem'>{coin?.name} ({coin?.symbol})</Text>                   
         </VStack>
         <Text color='white' textAlign={'left'} >
-            {coin?.description.en.slice(0, 600)}
+            {coin?.description.en.slice(0, 400)}
           </Text>
        <Stack mt={4}>
        <Text fontWeight={'bold'} fontSize={'1.8rem'}>
@@ -50,7 +50,7 @@ return () => {
           {coin?.links.homepage[0]}</Link>
         </Text>
        <Text fontWeight={'bold'} fontSize={'1.2rem'}>
-       Current_Price: {symbol}{coin?.market_data.current_price[currency.toLowerCase()]}
+       Current_Price: {symbol}{coin?.market_data?.current_price[currency.toLowerCase()]}
        </Text>
        <Text fontWeight={'bold'} fontSize={'1.2rem'}>
        Market_Cap:  {symbol}{coin?.market_data.market_cap[currency.toLowerCase()]}
@@ -80,18 +80,13 @@ interface CoinProps{
       "homepage": [
           string,
       ],
-    
-      "official_forum_url": [
-         string,
-      ],
   },
   "image": {
       "large":string
   },
   "market_cap_rank": number,
   "market_data": {
-      "current_price": number
-        
-      "market_cap": number
+      "current_price": string  
+      "market_cap": string
   },  
 }

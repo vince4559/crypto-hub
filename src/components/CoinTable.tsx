@@ -31,7 +31,7 @@ const CoinTable = () => {
   const {currency, symbol} = CryptoData()
   const [search, searchSet] = useState<string>('');
   const [listCoin, listCoinSet] = useState<ListCoinProps[]>([]);
-  const [loading, loadingSet] = useState<boolean>(false);
+  const [loading, loadingSet] = useState<boolean>(true);
   const [pageNumber, pageNumberSet] = useState<number>(0);
   const navigate = useNavigate()
 
@@ -56,9 +56,8 @@ const CoinTable = () => {
   }
  
   const userPage:number = 10;
-  const num  = Number(((handleCoinSearch()?.length) / userPage ))
   const pageVisited = pageNumber * userPage;
-  const pageCount = Math.ceil(num);
+  const pageCount = Math.ceil(((handleCoinSearch()?.length) / userPage ));
   const changePage = ({selected}:any) => {
     pageNumberSet(selected)
     window.scroll(0, 450)
@@ -83,7 +82,7 @@ const CoinTable = () => {
 
    <TableContainer mt={'4rem'}>
     {
-      loading? 
+      !loading? 
       (<VStack>
       <Spinner size={'lg'} />
       <Text>Data Loading</Text>
@@ -147,18 +146,17 @@ const CoinTable = () => {
           </Tbody>
         </Table>
        )
-    }
+       }
    </TableContainer>
-     
-     {/* setting up pagination  */}
+        {/* setting up pagination  */}
 
-    <ReactPaginate 
-    pageCount={pageCount}
-    onPageChange={changePage}
-  //  renderOnZeroPageCount={null}
-   containerClassName={'paginationBtns'}
-   activeClassName={'paginationActive'}
-    />
+        <ReactPaginate 
+          pageCount={pageCount}
+          onPageChange={changePage}
+         renderOnZeroPageCount ={null}
+        containerClassName={'paginationBtns'}
+        activeClassName={'paginationActive'}
+          />
    </Box>
   )
 }
