@@ -2,13 +2,18 @@ import { Box, Grid, GridItem, Image, Link, Stack, Text, VStack } from '@chakra-u
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import LineChart from '../components/LineChart';
 import { SingleCoin } from '../config/api';
 import { CryptoData } from '../context/CryptoContext'
 import NumberFormat from '../utility/NumberFormat';
 
+interface CurrProp{
+  currency: |string,
+  symbol:string
+}
 
 const Coins = () => {
- const {currency, symbol} =  CryptoData();
+ const {currency, symbol}:CurrProp =  CryptoData();
  const [coin, coinSet] = useState<CoinProps>();
 const {id} = useParams()
  const fetchSingleCoin = async() => {
@@ -16,18 +21,19 @@ const {id} = useParams()
   coinSet(data)
  };
 
- console.log(coin)
+//  console.log(coin)
 
  useEffect(() => {
 let single = fetchSingleCoin()
 return () => {
   !single
 }
- },[])
+ },[currency, id]);
+
  
   return (
    <Box p={5} >
-   <Grid templateColumns='repeat(3, 1fr)' >
+   <Grid templateColumns='repeat(3, 1fr)' gap={'3rem'} >
       <GridItem colSpan={[3,3,1,1]}>
         <VStack p={3} spacing={0}>
           <Image alt={coin?.id} src={coin?.image.large} w='100px' m={2} />
@@ -43,10 +49,6 @@ return () => {
           homepage: <Link isExternal href={coin?.links.homepage[0]} color={'gold'}> 
           {coin?.links.homepage[0]}</Link>
         </Text>
-        <Text color={'white'} fontSize="xl">
-          Official_forum: <Link isExternal href={coin?.links.official_forum_url[0]} color={'gold'}> 
-          {coin?.links.official_forum_url[0]}</Link>
-        </Text>
        <Text fontWeight={'bold'} fontSize={'1.2rem'}>
        Current_Price: {symbol}{coin?.market_data.current_price[currency.toLowerCase()]}
        </Text>
@@ -55,8 +57,10 @@ return () => {
        </Text>
        </Stack>
 
+      </GridItem >
+      <GridItem colSpan={[3,3,2,2]}>
+        <LineChart id={coin?.id} />
       </GridItem>
-      <GridItem colSpan={2}>1</GridItem>
    </Grid>
    </Box>
   )
@@ -86,20 +90,8 @@ interface CoinProps{
   },
   "market_cap_rank": number,
   "market_data": {
-      "current_price": {
-          "eur": number,
-          "gbp": number,
-          "ngn":number,
-          "usd": number,
-          },
+      "current_price": number
         
-      "market_cap": {
-         
-          "eur":number,
-          "gbp": number,
-          "ngn": number,
-          "usd": number,
-         
-      },
+      "market_cap": number
   },  
 }

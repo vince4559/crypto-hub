@@ -30,8 +30,8 @@ interface ListCoinProps{
 const CoinTable = () => {
   const {currency, symbol} = CryptoData()
   const [search, searchSet] = useState<string>('');
-  const [listCoin, listCoinSet] = useState<ListCoinProps[]>();
-  const [loading, loadingSet] = useState(true);
+  const [listCoin, listCoinSet] = useState<ListCoinProps[]>([]);
+  const [loading, loadingSet] = useState<boolean>(false);
   const [pageNumber, pageNumberSet] = useState<number>(0);
   const navigate = useNavigate()
 
@@ -56,9 +56,9 @@ const CoinTable = () => {
   }
  
   const userPage:number = 10;
-  const num  = Number((handleCoinSearch()?.length / userPage ))
+  const num  = Number(((handleCoinSearch()?.length) / userPage ))
   const pageVisited = pageNumber * userPage;
-  const pageCount = Math.ceil((num));
+  const pageCount = Math.ceil(num);
   const changePage = ({selected}:any) => {
     pageNumberSet(selected)
     window.scroll(0, 450)
@@ -83,7 +83,7 @@ const CoinTable = () => {
 
    <TableContainer mt={'4rem'}>
     {
-      !loading? 
+      loading? 
       (<VStack>
       <Spinner size={'lg'} />
       <Text>Data Loading</Text>
@@ -117,10 +117,6 @@ const CoinTable = () => {
                     
                       <Image alt={coin?.name} src={coin?.image} w='70px' />
                       <Text color={'white'} >{coin?.name}</Text>
-                      {/* <Stack>
-                      <Text color={'white'}>{coin?.symbol}</Text>
-                        <Text>{coin?.name}</Text>
-                      </Stack> */}
                    
                   </Td>
                   <Td>
@@ -135,13 +131,13 @@ const CoinTable = () => {
                   <Td>
                     {symbol}{NumberFormat(coin.atl.toFixed(2))}
                    <Text color={'white'} fontWeight='bold' >
-                    {coin.atl_date}
+                    {coin.atl_date.toString().split('T')[0]}
                    </Text>
                   </Td>
                   <Td>
                     {symbol}{NumberFormat(coin?.ath.toFixed(2))}
                    <Text color={'white'} fontWeight='bold' >
-                    {coin.ath_date}
+                    {coin.ath_date.toString().split('T')[0]}
                    </Text>
                   </Td>
                 </Tr>
@@ -159,7 +155,7 @@ const CoinTable = () => {
     <ReactPaginate 
     pageCount={pageCount}
     onPageChange={changePage}
-   renderOnZeroPageCount={undefined}
+  //  renderOnZeroPageCount={null}
    containerClassName={'paginationBtns'}
    activeClassName={'paginationActive'}
     />

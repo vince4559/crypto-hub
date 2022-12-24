@@ -1,10 +1,12 @@
 import { Box, Heading, Stack, Text } from '@chakra-ui/react'
 import Carousel from './Carousel'
+import crypto from "../assets/crpto.jpg" 
 
 
 const Banner = () => {
   return (
-  <Box p={3} pt={'4rem'}>
+  <Box mt={'2rem'} py={'2rem'} bgImage={crypto} bgPos={'top'} bgRepeat={'no-repeat'} 
+  bgBlendMode={'darken'} bgColor={'gray.900'} >
     <Stack>
       <Heading textAlign={'center'}>
         Top Trending Coins
