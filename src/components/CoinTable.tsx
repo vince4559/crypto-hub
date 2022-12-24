@@ -153,7 +153,7 @@ const CoinTable = () => {
         <ReactPaginate 
           pageCount={pageCount}
           onPageChange={changePage}
-         renderOnZeroPageCount ={null}
+        //  renderOnZeroPageCount ={null}
         containerClassName={'paginationBtns'}
         activeClassName={'paginationActive'}
           />
@@ -162,4 +162,3 @@ const CoinTable = () => {
 }
 
 export default CoinTable
-
