@@ -154,6 +154,8 @@ const CoinTable = () => {
           pageCount={pageCount}
           onPageChange={changePage}
         //  renderOnZeroPageCount ={null}
+        previousLabel={'<'}
+        nextLabel={'>'}
         containerClassName={'paginationBtns'}
         activeClassName={'paginationActive'}
           />

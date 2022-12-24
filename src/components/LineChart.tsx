@@ -78,7 +78,7 @@ const options: ChartOptions<any> = {
             !historic? 
             (<VStack>
                 <Spinner size={'lg'} />
-                <Text color={'red.300'}>Toggle price if the chart does'nt come up</Text>
+                <Text color={'red.500'}>Toggle the price to see chart</Text>
                 </VStack>) 
             : 
             (
