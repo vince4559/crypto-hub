@@ -23,7 +23,7 @@ interface ListCoinProps{
   "atl": number,
   "atl_date": number,
   "price_change_percentage_24h": number
-}
+};
 
 
 
@@ -46,7 +46,7 @@ const CoinTable = () => {
     return () => {
       !coinInfo
     }
-  },[])
+  },[currency])
  
   const handleCoinSearch = () => {
     return listCoin?.filter((coin:ListCoinProps) => 
