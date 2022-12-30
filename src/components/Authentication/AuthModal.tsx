@@ -1,6 +1,5 @@
 import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useDisclosure, useToast } from '@chakra-ui/react'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-import React from 'react'
 import GoogleButton from 'react-google-button'
 import { auth } from '../../fireBaseApp'
 import Login from './Login'

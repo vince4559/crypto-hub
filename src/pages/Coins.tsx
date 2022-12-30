@@ -1,5 +1,4 @@
-import { Box, Button, Grid, GridItem, HStack, Image, Link, Spinner, Stack, Text, useToast, VStack } from '@chakra-ui/react'
-import { async } from '@firebase/util';
+import { Box, Button, Grid, GridItem, Image, Link, Spinner, Stack, Text, useToast, VStack } from '@chakra-ui/react'
 import axios from 'axios';
 import { doc, setDoc } from 'firebase/firestore';
 import { useState, useEffect } from 'react';

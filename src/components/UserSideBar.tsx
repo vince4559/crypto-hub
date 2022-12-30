@@ -1,7 +1,6 @@
 import { useDisclosure, Button, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, DrawerFooter, Image, Avatar, Stack, Text, VStack, useToast, HStack, Box } from '@chakra-ui/react'
 import { signOut } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import React from 'react'
 import { CryptoData } from '../context/CryptoContext';
 import { auth, db } from '../fireBaseApp';
 import NumberFormat from '../utility/NumberFormat';
@@ -22,7 +21,7 @@ export const UserSideBar = () => {
       })
    };
 
-   const removeFromWatchList =async(coin:any)=>{
+   const removeFromWatchList =async(coin:ListCoinProps)=>{
     const coinRef = doc(db, 'watchlist', user.uid);
     try {
       await setDoc(coinRef,
