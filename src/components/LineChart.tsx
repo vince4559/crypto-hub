@@ -1,4 +1,4 @@
-import { Box, Button, color, HStack, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, HStack, Spinner, Text, VStack } from '@chakra-ui/react';
 import axios from 'axios';
 import {useState, useEffect} from 'react'
 import { HistoricalChart } from '../config/api';
@@ -28,14 +28,15 @@ import {
 
 
 const LineChart = ({id}:any) => {
-   const {currency, symbol} = CryptoData();
+   const {currency, loading, loadingSet} = CryptoData();
    const [days, daysSet] = useState<number>(1);
-    const[historic, historicSet] = useState<any>();    
+    const[historic, historicSet] = useState<any>();   
 
     
     const fetchHistoric = async() => {
        const  { data } = await axios.get(HistoricalChart(id, days, currency))
        historicSet(data?.prices)
+       loadingSet(false)
     };
 
 // console.log(historic);
@@ -45,7 +46,7 @@ let history = fetchHistoric()
 return () => {
     !history
 }
-},[currency, days]);
+},[currency, days, id]);
 
 const data = {
     labels: historic?.map((coin:any) => {
@@ -75,10 +76,10 @@ const options: ChartOptions<any> = {
   return (
     <Box w={'100%'}>
         {
-            !historic? 
+            loading? 
             (<VStack>
                 <Spinner size={'lg'} />
-                <Text color={'red.500'}>Toggle the price to see chart</Text>
+                <Text color={'red.500'}>Data loading</Text>
                 </VStack>) 
             : 
             (
@@ -91,7 +92,7 @@ const options: ChartOptions<any> = {
                 {chartDays.map((day:ChartDaysProps) => {
                     const selected = day.value === days;
                     return (
-              <Button colorScheme={selected? 'yellow' : 'white'} border={'1px solid orange'} size={'sm'} 
+              <Button key={day.label} colorScheme={selected? 'yellow' : 'white'} border={'1px solid orange'} size={'sm'} 
               onClick={() => daysSet(day.value)}
               >
                 {day.label}

@@ -1,14 +1,12 @@
-import { Box, FormControl, Heading, HStack, Image, Input, Spinner, Stack, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react'
-import axios from 'axios';
+import { Box, FormControl, Heading, Image, Input, Spinner, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import ReactPaginate from 'react-paginate';
 import { useNavigate } from 'react-router-dom';
-import { CoinList } from '../config/api';
 import { CryptoData } from '../context/CryptoContext';
 import NumberFormat from '../utility/NumberFormat';
 
 
-interface ListCoinProps{
+export interface ListCoinProps{
   "id": string,
   "symbol": string,
   "name": string,
@@ -28,17 +26,11 @@ interface ListCoinProps{
 
 
 const CoinTable = () => {
-  const {currency, symbol} = CryptoData()
+  const {currency, symbol, fetchCoin, listCoin, loading} = CryptoData()
   const [search, searchSet] = useState<string>('');
-  const [listCoin, listCoinSet] = useState<ListCoinProps[]>([]);
-  const [loading, loadingSet] = useState<boolean>(true);
   const [pageNumber, pageNumberSet] = useState<number>(0);
   const navigate = useNavigate()
 
-  const fetchCoin = async() => {
-    const {data} = await axios.get(CoinList(currency))
-    listCoinSet(data)
-  };
 
 
   useEffect(() => {
@@ -82,7 +74,7 @@ const CoinTable = () => {
 
    <TableContainer mt={'4rem'}>
     {
-      !loading? 
+      loading? 
       (<VStack>
       <Spinner size={'lg'} />
       <Text>Data Loading</Text>
@@ -154,8 +146,8 @@ const CoinTable = () => {
           pageCount={pageCount}
           onPageChange={changePage}
         //  renderOnZeroPageCount ={null}
-        previousLabel={'<'}
-        nextLabel={'>'}
+        previousLabel={''}
+        nextLabel={''}
         containerClassName={'paginationBtns'}
         activeClassName={'paginationActive'}
           />

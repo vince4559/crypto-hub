@@ -1,10 +1,35 @@
-import { Box, Button, Grid, GridItem, HStack, Image, Link, Stack, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Grid, GridItem, HStack, Image, Link, Spinner, Stack, Text, useToast, VStack } from '@chakra-ui/react'
+import { async } from '@firebase/util';
 import axios from 'axios';
+import { doc, setDoc } from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import LineChart from '../components/LineChart';
 import { SingleCoin } from '../config/api';
 import { CryptoData } from '../context/CryptoContext'
+import { db } from '../fireBaseApp';
+
+export interface CoinProps{
+  "id":string,
+  "symbol": string,
+  "name": string,
+  "description": {
+      "en": string,
+      },
+  "links": {
+      "homepage": [
+          string,
+      ],
+  },
+  "image": {
+      "large":string
+  },
+  "market_cap_rank": number,
+  "market_data": {
+      "current_price": string  
+      "market_cap": string
+  },  
+}
 
 
 interface CurrProp{
@@ -17,12 +42,14 @@ type ParamsProps = {
 }
 
 const Coins = () => {
- const {currency, symbol}:any =  CryptoData();
+ const {currency, symbol, loading, loadingSet, user, watchlist} =  CryptoData();
  const [coin, coinSet] = useState<CoinProps>();
 const {id}= useParams() as ParamsProps
+const toast = useToast();
  const fetchSingleCoin = async() => {
   const { data } = await axios.get(SingleCoin(id))
   coinSet(data)
+  loadingSet(false)
  };
 
 //  console.log(coin)
@@ -33,10 +60,63 @@ return () => {
   !single
 }
  },[currency, id]);
+ 
+const inWatchList = watchlist.includes(coin?.id);
 
+ const addToWatchList =async()=>{
+  const coinRef = doc(db, 'watchlist', user.uid);
+  try {
+    await setDoc(coinRef,
+      {coins:watchlist? [...watchlist, coin?.id]: [coin?.id]
+      });
+      toast({
+        title: `${coin?.name} added to watchlist `,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
+  } catch (error:any) {
+    toast({
+      title: error.message,
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    })
+  }
+ };
+
+  const removeFromWatchList =async()=>{
+  const coinRef = doc(db, 'watchlist', user.uid);
+  try {
+    await setDoc(coinRef,
+      {coins: watchlist.filter((watch:string) => watch !==coin?.id)},
+      {merge: true}
+      );
+      toast({
+        title: `${coin?.name} removed from watchlist `,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
+  } catch (error:any) {
+    toast({
+      title: error.message,
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+    })
+  }
+ };
  
   return (
    <Box p={5} >
+    {
+      loading? 
+      (<VStack>
+          <Spinner size={'lg'} />
+          <Text color={'red.500'}>Data loading</Text>
+          </VStack>) 
+          :
    <Grid templateColumns='repeat(3, 1fr)' gap={'3rem'} >
       <GridItem colSpan={[3,3,1,1]}>
         <VStack p={3} spacing={0}>
@@ -59,6 +139,14 @@ return () => {
        <Text fontWeight={'bold'} fontSize={'1.2rem'}>
        Market_Cap:  {symbol}{coin?.market_data.market_cap[currency.toLowerCase()]}
        </Text>
+      {
+        user &&  
+        <Button colorScheme={inWatchList? 'red' : 'yellow'} color='black' 
+        onClick={inWatchList? removeFromWatchList: addToWatchList}
+        >
+        {inWatchList? 'Remove from watchlist' : 'Add to Watchlist'}
+      </Button>
+      }
        </Stack>
 
       </GridItem >
@@ -66,6 +154,7 @@ return () => {
         <LineChart id={coin?.id} />
       </GridItem>
    </Grid>
+   }
    </Box>
   )
 }
@@ -73,24 +162,3 @@ return () => {
 export default Coins
 
 
-interface CoinProps{
-  "id":string,
-  "symbol": string,
-  "name": string,
-  "description": {
-      "en": string,
-      },
-  "links": {
-      "homepage": [
-          string,
-      ],
-  },
-  "image": {
-      "large":string
-  },
-  "market_cap_rank": number,
-  "market_data": {
-      "current_price": string  
-      "market_cap": string
-  },  
-}
